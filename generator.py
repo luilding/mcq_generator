@@ -13,14 +13,22 @@ client = OpenAI(api_key=api_key)
 
 #Creation of user prompt specific to generating MCQ questions
 def learning_objective_prompt(learning_objective):
-    return f"""We have been given this learning objective {learning_objective}
-    Please provide a multiple choice question with 4 answers regarding that topic, with one being the right answer"""
+    return f"""
+    You will be provided with a single learning objective for any STEM topic.
 
-#Single learning objective
-#Output formatted in human readable form
-#Question suited to higher education
-#Generator has to provide an api 
-#Only one right answer
+    We have been given this learning objective: {learning_objective}
+    Please provide a multiple choice question with 4 answers regarding that topic, with ONLY ONE ANSWER being the right answer.
+    
+    Ensure the questions are suitable to students in Higher Education, and are in English.
+   
+    IMPORTANT FORMATTING INSTRUCTIONS:
+    - Use <strong> or <b> tags for bold text (not ** markdown)
+    - Use <sub> tags for subscripts in chemical formulas (e.g., H<sub>2</sub>O)
+    - Use <sup> tags for superscripts (e.g., E=mc<sup>2</sup>)
+    - Use <br> for line breaks
+    - Format the question with <strong>Question:</strong> at the beginning
+    - Format the correct answer with <strong>Correct Answer:</strong> at the end
+    """
 
 #Sending the learning objective and user prompt to OpenAI's API
 def generate_mcq(learning_objective):
@@ -32,6 +40,9 @@ def generate_mcq(learning_objective):
     )
 
     query = response.choices[0].message.content
+
+    query = query.replace('\n', '<br>')
+    print(query)
     return query
 
 #Creating API endpoint for receiving learning objectives via POST requests

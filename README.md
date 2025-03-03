@@ -1,35 +1,107 @@
 
+# Quiz Question Generator
+
+### 1.0 Instructions to use the code (locally)
+**Note: Step 10 is for using the application, and can be used within the cloud deployment too.**
+1) Before starting ensure you have an active OpenAI key: https://openai.com/index/openai-api/.
+
+2) Clone the github repo: https://github.com/luilding/mcq_generator.
+
+3) Download Python, if not installed (for this scenario we are using Python 3.11).
+
+4) Create a virtual environment (venv) of your choice. For example conda can be downloaded with miniconda: https://docs.conda.io/projects/conda/en/stable/index.html.
+
+5) Create the venv:
+
+`conda create -n mcq_generator python=3.11`.
+
+5) Activate the venv:
+
+`conda activate mcq_generator`.
+
+6) Install 'Poetry' and use it to install relevant libraries:
+
+`pip install poetry`
+
+`poetry install`.
 
 
-This application is deployed using Render's free tier, inline with the cost saving aspect of the project.
+7) Create an .env file in your project's directory, and add the OpenAI API key:
 
-### Deployment to Render:
-1) Ensure code is in a Github Repo.
+`OPENAI_API_KEY=your_api_key_here`.
+
+8) To run the code enter this command:
+
+`python generator.py`.
+
+9) The application will then start and be accessible at http://localhost:5000.
+
+10) Navigate to the above page. To use the application, type in a learning objective in the box. Press 'Generate Question' which will then create the MCQ's.
+
+### 2.0 Instructions on how to deploy the code to the cloud (with Render):
+**Note: This application is deployed using Render's free tier, in line with the cost saving aspect of the project.**
+
+1) Ensure the code is in a Github Repo.
 
 2) Create an account on Render: https://render.com/
 
-3) To make a Webservice, in Render's dashboard, click New > Web Service 
+3) To make a Webservice, in Render's dashboard, click New > Web Service.
 
-4) Connect to the relevant Github Repo
+4) Connect to the relevant Github Repo.
 
-5) Choose the relevant language (Python 3)
+5) Choose the relevant language (Python 3).
 
-6) Select a region nearby
+6) Select a region nearby.
 
-7) For the Build command use: "pip install poetry && poetry install --no-root"
+7) For the Build command, enter: 
 
-8) For the Start command use: "poetry run gunicorn generator:app"
+`pip install poetry && poetry install --no-root`.
 
-9) Select Free as the Instance Type
+8) For the Start command, enter:
 
-10) Add your OpenAI API key as an environment variable at the bottom, set the Key as "OPENAI_API_KEY". Make another environment variable "PYTHON_VERSION" to specify the version to use (e.g 3.11.11)
+ `poetry run gunicorn generator:app`.
 
-11) Click Deploy Web Service
+9) Select Free as the Instance Type.
 
-12) Render will then navigate to a deployment page. Wait for deployment to complete
+10) Add your OpenAI API key as an environment variable at the bottom. Set the Key as "OPENAI_API_KEY".
 
-13) Once deployment is successful, you can access the deployed application via the URL provided (likely ending in .onrender.com)
+11) Click Deploy Web Service.
 
-14) If you want to set a specific Python version, naviate to 'Environment' In the Left tool bar, and add an environment 
+12) Render will then navigate to a deployment page. Wait for deployment to complete.
 
-14) To stop the deployment, navigate to 'Settings' in the Left tool bar, select the relevant Webservice and click 'Suspend Web Service' at the bottom of the page.
+13) Once deployment is successful, you can access the deployed application via the URL provided (ending in .onrender.com).
+
+14) If you want to set a specific Python version, naviate to 'Environment' In the left tool bar, and add an environment.
+
+14) To stop the deployment, navigate to 'Settings' in the left tool bar. Select the relevant Webservice and click 'Suspend Web Service' at the bottom of the page.
+
+
+### 3.0 Steps taken to finish the assessment
+1) I created a basic python file for testing inital generation of queries using gpt-4o-mini, in an effort to minimise costs.
+
+2) I researched different models that may be relevant to this use case. I spent time researching ChemLLM to see if this would give more precise results. After being informed that the tool should cover all of STEM, I reverted to using gpt-4o-mini.
+
+3) I investigated different prompts to improve the functionality.
+
+4) I built a simple flask endpoint to test the API.
+
+5) I built a simple frontend and connected it to the API to allow for details to be displayed.
+
+6) After comparing various deployment methods, I opted for Render, as it would allow for a quick deployment suitable for a POC, as well as offering a free tier.
+
+7) I added functionality to allow for appropriate formatting of equations.
+
+
+### 4.0 Easiest and hardest parts of the assesment
+
+I found the creation of the AI model, with relevant prompts the easiest part of the assignment. However, ensuring that answers were correct was the hardest, since I do not have a background spanning STEM fields such as Chemistry.
+
+### 5.0 Guaranteeing the quality and scientific correctness of the questions generated.
+
+1) I would get subject matter experts to review questions/answers made by the model and comment on both the quality of the questions and correctness of the solution provided. For examples where the model produces wrong answers, I would create a dataset of the original question, and the experts corrected answer. This dataset can then be used to fine tune the model.
+
+2) I would investigate using a more powerful model than the current choice of gpt-4o-mini. Such as gpt-4o, or using different models that have been trained for specific disciplines. For instance routing all Chemistry related questions to ChemLLM, and ClincalGPT for medical questions.
+
+2) I would find datasets of high education STEM questions, e.g. at a university grade, to finetune the LLM chosen.
+
+4) I would utilise multiple models chained together as verification. For example, one model generates the questions, and another model then acts as a verification check of the MCQs generated by the initial model.
