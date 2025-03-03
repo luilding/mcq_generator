@@ -49,5 +49,10 @@ def api_generate_question():
     question = generate_mcq(learning_objective)
     return jsonify({"question": question})
 
+
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('index.html')
+
 if __name__ == '__main__':
     app.run(debug=True)

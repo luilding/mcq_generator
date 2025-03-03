@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MCQ Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color:rgb(76, 116, 175);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Multiple Choice Question Generator</h1>
+    <p>Enter a single learning objective to generate a multiple-choice question with 4 possible answers.</p>
+    
+    <textarea id="learning-objective" placeholder="Enter Example: Balance chemical equations using the law of conservation of mass"></textarea>
+    <button onclick="generateQuestion()">Generate Question</button>
+    
+    <div id="result"></div>
+    
+    <script>
+        async function generateQuestion() {
+            const learningObjective = document.getElementById('learning-objective').value;
+            if (!learningObjective) {
+                alert('Please enter a learning objective');
+                return;
+            }
+            
+            document.getElementById('result').innerText = 'Generating question...';
+            
+            try {
+                const response = await fetch('/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ learning_objective: learningObjective })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    document.getElementById('result').innerText = `Error: ${data.error}`;
+                } else {
+                    document.getElementById('result').innerText = data.question;
+                }
+            } catch (error) {
+                document.getElementById('result').innerText = `Error: ${error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>
