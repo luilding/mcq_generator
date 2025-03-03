@@ -42,7 +42,7 @@ def generate_mcq(learning_objective):
     query = response.choices[0].message.content
 
     query = query.replace('\n', '<br>')
-    print(query)
+    #print(query)
     return query
 
 #Creating API endpoint for receiving learning objectives via POST requests
